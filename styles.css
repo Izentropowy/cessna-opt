@@ -1,0 +1,46 @@
+
+body {
+    background-image: url(images/clouds.avif);
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat; 
+    background-size: cover;
+    padding-bottom: 150px;
+}
+
+.navbar img {
+    width: 25px;
+}
+
+.plane-photo {
+    aspect-ratio: 1 / 1;
+    width: 20%;
+    border-radius: 50%;
+    border: 2px solid rgba(27, 27, 30, 0.3);
+    opacity: 0.65;
+}
+
+footer img {
+    border-radius: 50%;
+}
+
+.footer-text {
+    max-width: 80%;
+}
+
+.warning {
+    margin-bottom: 120px;
+}
+
+.dropdown-full {
+    width: 75%;
+}
+
+.dropdown-half {
+    width: 25%;
+}
+
+.input-title {
+    width: 25%;
+    font-size: smaller;
+}
