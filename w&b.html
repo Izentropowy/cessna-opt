@@ -7,6 +7,7 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
+    <script src="weightAndBalance.js" defer></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark py-4 mb-md-4 ">
@@ -40,20 +41,20 @@
     </div>
     <div class="container settings mb-5">
         <div class="input-group">
-            <div class="input-group-text input-title">Block Fuel</div>
-            <input type="number" class="form-control" placeholder="kg">
+            <div class="input-group-text input-title" >Block Fuel</div>
+            <input type="number" class="form-control" placeholder="l" id="block-fuel">
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">Row 1</div>
-            <input type="number" class="form-control" placeholder="kg">
+            <input type="number" class="form-control" placeholder="kg" id="row-1">
             <div class="input-group-text input-title">Row 2</div>
-            <input type="number" class="form-control" placeholder="kg">
+            <input type="number" class="form-control" placeholder="kg" id="row-2">
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">Baggage 1</div>
-            <input type="number" class="form-control" placeholder="kg">
+            <input type="number" class="form-control" placeholder="kg" id="baggage-1">
             <div class="input-group-text input-title">Baggage 2</div>
-            <input type="number" class="form-control" placeholder="kg">
+            <input type="number" class="form-control" placeholder="kg" id="baggage-2">
         </div>
     </div>
     <div class="container">
@@ -64,15 +65,11 @@
                 <table class="table">
                     <tr>
                         <th>TOW</th>
-                        <th>123</th>
-                    </tr>
-                    <tr>
-                        <th>Weight</th>
-                        <th>123</th>
+                        <th id="tow">123</th>
                     </tr>
                     <tr>
                         <th>Moment</th>
-                        <th>123</th>
+                        <th id="moment">123</th>
                     </tr>
                 </table>
             </div>
