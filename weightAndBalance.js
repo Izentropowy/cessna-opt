@@ -28,7 +28,7 @@ function calcWeight(fuel, row1, row2, bag1, bag2){
     let values = [fuel, row1, row2, bag1, bag2, BEM];
     values = values.map(val => val === '' ? 0 : val);
     let totalMass = values.reduce((acc, val) => acc += parseFloat(val));
-    return totalMass.toFixed(2) + " kg";
+    return totalMass.toFixed(2);
 }
 
 function calcMoment(fuel, row1, row2, bag1, bag2){
@@ -39,18 +39,26 @@ function calcMoment(fuel, row1, row2, bag1, bag2){
     let moment4 = bag1 * bag1ARM;
     let moment5 = bag2 * bag2ARM;
     let totalMoment = moment0 + moment1 + moment2 + moment3 + moment4 + moment5;
-    return totalMoment.toFixed(2) + " kgm";
+    return totalMoment.toFixed(2);
+}
+
+function updateChart(totalMoment, totalMass){
+    chart.data.datasets[2].data[0] = {x: totalMoment, y: totalMass};
+    chart.update();
 }
 
 function calcResults(){
     fuel = calcFuelMass(blockFuel.value);
-    takeoffWeight.textContent = calcWeight(fuel, row1.value, row2.value, baggage1.value, baggage2.value);
-    moment.textContent = calcMoment(fuel, row1.value, row2.value, baggage1.value, baggage2.value);
+    let m = calcMoment(fuel, row1.value, row2.value, baggage1.value, baggage2.value);
+    let w = calcWeight(fuel, row1.value, row2.value, baggage1.value, baggage2.value);
+    takeoffWeight.textContent = w + ' kg';
+    moment.textContent = m + ' kgm';
+    updateChart(m, w);
 }
 
 variables.forEach(element => element.addEventListener('change', () => calcResults()));
 
-new Chart(ctx, {
+var chart = new Chart(ctx, {
   data: {
     datasets: [{
         type: 'scatter',
@@ -84,7 +92,7 @@ new Chart(ctx, {
         type: 'scatter',
         label: 'Position',
         data: [
-            {x:900, y:900},
+            {x:610, y:680},
         ],
         pointBackgroundColor: 'black',
         pointBorderColor: 'black',
@@ -92,3 +100,5 @@ new Chart(ctx, {
     }],
   },
 });
+
+
