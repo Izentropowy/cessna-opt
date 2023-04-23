@@ -9,6 +9,8 @@ const baggage2 = document.getElementById('baggage-2');
 const takeoffWeight = document.getElementById('tow');
 const moment = document.getElementById('moment');
 
+const ctx = document.getElementById('myChart');
+
 const BEM = 795.8;
 const bemARM = 1.0864;
 const fuelARM = 1.2192;
@@ -26,7 +28,7 @@ function calcWeight(fuel, row1, row2, bag1, bag2){
     let values = [fuel, row1, row2, bag1, bag2, BEM];
     values = values.map(val => val === '' ? 0 : val);
     let totalMass = values.reduce((acc, val) => acc += parseFloat(val));
-    return totalMass.toFixed(2);
+    return totalMass.toFixed(2) + " kg";
 }
 
 function calcMoment(fuel, row1, row2, bag1, bag2){
@@ -37,7 +39,7 @@ function calcMoment(fuel, row1, row2, bag1, bag2){
     let moment4 = bag1 * bag1ARM;
     let moment5 = bag2 * bag2ARM;
     let totalMoment = moment0 + moment1 + moment2 + moment3 + moment4 + moment5;
-    return totalMoment.toFixed(2);
+    return totalMoment.toFixed(2) + " kgm";
 }
 
 function calcResults(){
@@ -46,9 +48,47 @@ function calcResults(){
     moment.textContent = calcMoment(fuel, row1.value, row2.value, baggage1.value, baggage2.value);
 }
 
-variables.forEach(element => {
-    element.addEventListener('change', () => {
-        calcResults();
-    })
-});
+variables.forEach(element => element.addEventListener('change', () => calcResults()));
 
+new Chart(ctx, {
+  data: {
+    datasets: [{
+        type: 'scatter',
+        label: 'Normal',
+        data: [
+            {x:610.56, y:680.4},
+            {x:783.36, y:884.5},
+            {x:1198.08, y:1156.7},
+            {x:1393.92, y:1156.7},
+            {x:817.92, y:680.4},
+            {x:610.56, y:680.4},
+        ],
+        borderWidth: 2,
+        showLine: true,
+        pointRadius: 0
+    },{
+        type: 'scatter',
+        label: 'Utility',
+        data: [
+            {x:610.56, y:680.4},
+            {x:783.36, y:884.5},
+            {x:956.16, y:997.9},
+            {x:1025.28, y:997.9},
+            {x:691.2, y:680.4},
+            {x:610.56, y:680.4},
+        ],
+        borderWidth: 2,
+        showLine: true,
+        pointRadius: 0
+    },{
+        type: 'scatter',
+        label: 'Position',
+        data: [
+            {x:900, y:900},
+        ],
+        pointBackgroundColor: 'black',
+        pointBorderColor: 'black',
+        pointRadius: 3,
+    }],
+  },
+});
