@@ -58,9 +58,24 @@ var table = [
         // elevation
     // temperature
     // wind
+        // magnitude
+        // direction
+        // runway heading
     // runway surface
 
 function calcPressAlt(qnh, elevation){
     let pa = elevation + 30 * (1013 - qnh);
     return pa;
 }
+
+function toRadians (angle) {
+    return angle * (Math.PI / 180);
+}
+
+function calcwindComponent(direction, magnitude, heading){
+    let angle = toRadians(Math.abs(direction - heading));
+    let hwc = magnitude * Math.cos(angle);
+    return hwc;
+}
+
+console.log(calcwindComponent(150, 15, 280));
