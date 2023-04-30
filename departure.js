@@ -132,19 +132,18 @@ function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
             [4000, 20, 555],
             [6000, 20, 450],
             [8000, 20, 345],
-            [10000, -20, 240,] 
-            [12000, -20, 135]  ],
+            [10000, 20, 240], 
+            [12000, 20, 135]  ],
     
         [   [   0, 40, 645],
             [2000, 40, 560],
             [4000, 40, 495],
             [6000, 40, 390],
             [8000, 40, 285],
-            [10000, -20, 180], 
-            [12000, -20, 0]  ],  
-        ];
+            [10000, 40, 180], 
+            [12000, 40, 0]  ]];
     
-        // avg pressAlt for climb is 2/3 of the dfference
+        // avg pressAlt for climb is 2/3 of the difference
         let pressAlt = 0.667 * (pressAltCruise - pressAltTakeoff);
 
         let pressFloor = Math.floor(pressAlt / 2000) * 2000;
@@ -152,7 +151,12 @@ function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
 
         let tempFloor = Math.floor(temperature / 20) * 20;
         let tempCeil = Math.ceil(temperature / 20) * 20;
-        console.log(pressFloor, pressCeil, tempFloor, tempCeil);
+
+        // tables only with required temperatures
+        let tempReduced = [table[(tempFloor + 20) / 20], table[(tempCeil + 20) / 20]];
+        console.log(tempFloor,tempCeil);
+        console.log(tempReduced);
+        
 }
 
-calcRoc(250, 3500, 15);
+calcRoc(250, 3500, 35);
