@@ -163,7 +163,10 @@ function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
         let higherRoc = interpolate(pressFloor, pressCeil, pressReducedHighTemp[0][2], pressReducedHighTemp[1][2], pressAlt);
         // calc ROC
         let roc = interpolate(tempFloor, tempCeil, lowerRoc, higherRoc, temperature);
-        console.log(roc);
+        
+        return roc;
 }
 
 calcRoc(0, 3000, 20);
+
+funct
