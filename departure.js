@@ -30,8 +30,7 @@ function interpolate(x1, x2, y1, y2, x){
     return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 }
 
-// 2550lb
-function takeoff(pressAlt, temperature)
+function calcTorAndTod(pressAlt, temperature)
 {
     let table = [
         [ 
@@ -107,7 +106,53 @@ function takeoff(pressAlt, temperature)
         let tod = interpolate(tempFloor, tempCeil, lowerTod, higherTod, temperature);
 
         return [tor, tod];
-    }
+}
 
-let results = takeoff(8000, 40);
-console.log(results);
+function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
+    let table = [
+        [ 
+            [   0, -20,  855],
+            [2000, -20, 760],
+            [4000, -20, 685],
+            [6000, -20, 575],
+            [8000, -20, 465], 
+            [10000, -20, 360], 
+            [12000, -20, 255] ],
+    
+        [   [   0, 0,  785],
+            [2000, 0, 695],
+            [4000, 0, 620],
+            [6000, 0, 515],
+            [8000, 0, 405], 
+            [10000, 0, 300], 
+            [12000, 0, 195] ],
+    
+        [   [   0, 20,  710],
+            [2000, 20, 625],
+            [4000, 20, 555],
+            [6000, 20, 450],
+            [8000, 20, 345],
+            [10000, -20, 240,] 
+            [12000, -20, 135]  ],
+    
+        [   [   0, 40, 645],
+            [2000, 40, 560],
+            [4000, 40, 495],
+            [6000, 40, 390],
+            [8000, 40, 285],
+            [10000, -20, 180], 
+            [12000, -20, 0]  ],  
+        ];
+    
+        // avg pressAlt for climb is 2/3 of the dfference
+        let pressAlt = 0.667 * (pressAltCruise - pressAltTakeoff);
+
+        let pressFloor = Math.floor(pressAlt / 2000) * 2000;
+        let pressCeil = Math.ceil(pressAlt / 2000) * 2000;
+
+        let tempFloor = Math.floor(temperature / 20) * 20;
+        let tempCeil = Math.ceil(temperature / 20) * 20;
+        console.log(pressFloor, pressCeil, tempFloor, tempCeil);
+}
+
+calcRoc(250, 3500, 15);
