@@ -25,6 +25,10 @@ function calcwindComponent(direction, magnitude, heading){
     return hwc;
 }
 
+function interpolate(x1, x2, y1, y2, x){
+    if (x1 === x2) return y1;
+    return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
+}
 
 // 2550lb
 function takeoff(pressAlt, temperature)
@@ -88,25 +92,7 @@ function takeoff(pressAlt, temperature)
             [8000, 40, 2450, 4615] ]];
 
         // tables reduction
-        tempReduced = [table[tempFloor / 10], table[tempCeil / 10]];
-        pressReducedLow = [tempReduced[0][pressFloor / 1000], tempReduced[0][pressCeil / 1000]];
-        pressReducedHigh = [tempReduced[1][pressFloor / 1000], tempReduced[1][pressCeil / 1000]];
-
-        // linear interpolation of ground Roll
-        let groundRollLow = (pressAlt - pressReducedLow[0][0]) / (pressReducedLow[1][0] - pressReducedLow[0][0]) * (pressReducedLow[1][2] - pressReducedLow[0][2]) + pressReducedLow[0][2];
-
-        let groundRollHigh = (pressAlt - pressReducedHigh[0][0]) / (pressReducedHigh[1][0] - pressReducedHigh[0][0]) * (pressReducedHigh[1][2] - pressReducedHigh[0][2]) + pressReducedHigh[0][2];
-        
-        let groundRoll = (temperature - tempFloor) / (tempCeil - tempFloor) * (groundRollHigh - groundRollLow) + groundRollLow;
-
-        // linear interpolation of screenHeightClearance
-        let screenHeightClearanceLow = (pressAlt - pressReducedLow[0][0]) / (pressReducedLow[1][0] - pressReducedLow[0][0]) * (pressReducedLow[1][3] - pressReducedLow[0][3]) + pressReducedLow[0][3];
-
-        let screenHeightClearanceHigh = (pressAlt - pressReducedHigh[0][0]) / (pressReducedHigh[1][0] - pressReducedHigh[0][0]) * (pressReducedHigh[1][3] - pressReducedHigh[0][3]) + pressReducedHigh[0][3];
-        
-        let screenHeightClearance = (temperature - tempFloor) / (tempCeil - tempFloor) * (screenHeightClearanceHigh - screenHeightClearanceLow) + screenHeightClearanceLow;
-
-        console.log(groundRoll, screenHeightClearance);
+ 
 }
 
-takeoff(1300, 8);
+takeoff(7000, 1);
