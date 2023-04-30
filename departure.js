@@ -154,9 +154,16 @@ function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
 
         // tables only with required temperatures
         let tempReduced = [table[(tempFloor + 20) / 20], table[(tempCeil + 20) / 20]];
-        console.log(tempFloor,tempCeil);
-        console.log(tempReduced);
-        
+        // tables only with required pressures for lower temp
+        let pressReducedLowTemp = [tempReduced[0][pressFloor / 2000], tempReduced[0][pressCeil / 2000]];
+        // tables only with required pressures for higher temp
+        let pressReducedHighTemp = [tempReduced[1][pressFloor / 2000], tempReduced[1][pressCeil / 2000]];
+        // calc ROCs for respective temperatures
+        let lowerRoc = interpolate(pressFloor, pressCeil, pressReducedLowTemp[0][2], pressReducedLowTemp[1][2], pressAlt);
+        let higherRoc = interpolate(pressFloor, pressCeil, pressReducedHighTemp[0][2], pressReducedHighTemp[1][2], pressAlt);
+        // calc ROC
+        let roc = interpolate(tempFloor, tempCeil, lowerRoc, higherRoc, temperature);
+        console.log(roc);
 }
 
-calcRoc(250, 3500, 35);
+calcRoc(0, 3000, 20);
