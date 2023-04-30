@@ -33,12 +33,6 @@ function interpolate(x1, x2, y1, y2, x){
 // 2550lb
 function takeoff(pressAlt, temperature)
 {
-    pressFloor = Math.floor(pressAlt / 1000) * 1000;
-    pressCeil = Math.ceil(pressAlt / 1000) * 1000;
-
-    tempFloor = Math.floor(temperature / 10) * 10;
-    tempCeil = Math.ceil(temperature / 10) * 10;
-
     let table = [
         [ 
             [   0, 0,  860, 1465],
@@ -91,8 +85,29 @@ function takeoff(pressAlt, temperature)
             [7000, 40, 2215, 4045],
             [8000, 40, 2450, 4615] ]];
 
-        // tables reduction
- 
-}
+        let pressFloor = Math.floor(pressAlt / 1000) * 1000;
+        let pressCeil = Math.ceil(pressAlt / 1000) * 1000;
 
-takeoff(7000, 1);
+        let tempFloor = Math.floor(temperature / 10) * 10;
+        let tempCeil = Math.ceil(temperature / 10) * 10;
+
+        // tables only with required temperatures
+        let tempReduced = [table[tempFloor / 10], table[tempCeil / 10]];
+        // tables only with required pressures for lower temp
+        let pressReducedLowTemp = [tempReduced[0][pressFloor / 1000], tempReduced[0][pressCeil / 1000]];
+        // tables only with required pressures for higher temp
+        let pressReducedHighTemp = [tempReduced[1][pressFloor / 1000], tempReduced[1][pressCeil / 1000]];
+        // calc TORs and TODs for respective temperatures
+        let lowerTor = interpolate(pressFloor, pressCeil, pressReducedLowTemp[0][2], pressReducedLowTemp[1][2], pressAlt);
+        let higherTor = interpolate(pressFloor, pressCeil, pressReducedHighTemp[0][2], pressReducedHighTemp[1][2], pressAlt);
+        let lowerTod = interpolate(pressFloor, pressCeil, pressReducedLowTemp[0][3], pressReducedLowTemp[1][3], pressAlt);
+        let higherTod = interpolate(pressFloor, pressCeil, pressReducedHighTemp[0][3], pressReducedHighTemp[1][3], pressAlt);
+        // calc TOR
+        let tor = interpolate(tempFloor, tempCeil, lowerTor, higherTor, temperature);
+        let tod = interpolate(tempFloor, tempCeil, lowerTod, higherTod, temperature);
+
+        return [tor, tod];
+    }
+
+let results = takeoff(8000, 40);
+console.log(results);
