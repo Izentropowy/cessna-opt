@@ -1,15 +1,4 @@
 
-// what do I need:
-    // pressure altitude
-        // qnh
-        // elevation
-    // temperature
-    // wind
-        // magnitude
-        // direction
-        // runway heading
-    // runway surface
-
 function calcPressAlt(qnh, elevation){
     let pa = elevation + 30 * (1013 - qnh);
     return pa;
@@ -25,12 +14,24 @@ function calcwindComponent(direction, magnitude, heading){
     return hwc;
 }
 
+function calcCruiseDensity(qnh, elevation, cruise, temperature){
+    let p = qnh - 1 / 27 * (cruise - elevation);
+    let T = temperature - 2 / 1000 * (cruise - elevation);
+    let rho = (p * 100) / (287 * (T + 273));
+    return rho;
+}
+
+function calcTas(ias, rho){
+    let tas = ias / Math.sqrt(rho / 1.225);
+    return tas;
+}
+
 function interpolate(x1, x2, y1, y2, x){
     if (x1 === x2) return y1;
     return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 }
 
-function calcTorAndTod(pressAlt, temperature)
+function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, heading, surface)
 {
     let table = [
         [ 
@@ -83,6 +84,8 @@ function calcTorAndTod(pressAlt, temperature)
             [6000, 40, 2010, 3585],
             [7000, 40, 2215, 4045],
             [8000, 40, 2450, 4615] ]];
+        
+        let pressAlt = pressAlt(qnh, elevation);
 
         let pressFloor = Math.floor(pressAlt / 1000) * 1000;
         let pressCeil = Math.ceil(pressAlt / 1000) * 1000;
@@ -105,10 +108,28 @@ function calcTorAndTod(pressAlt, temperature)
         let tor = interpolate(tempFloor, tempCeil, lowerTor, higherTor, temperature);
         let tod = interpolate(tempFloor, tempCeil, lowerTod, higherTod, temperature);
 
+        // wind correction
+        let hwc = calcwindComponent(direction, magnitude, heading);
+        if (hwc > 0){
+            tor -= 1 / 90 * hwc * tor;
+            tod -= 1 / 90 * hwc * tod;
+        }
+        else if (hwc < 0){
+            tor += 1 / 20 * hwc * tor;
+            tod += 1 / 20 * hwc * tod;
+        }
+
+        // surface correction
+        if (surface === "grass"){
+            let factor = 1.15 * tor;
+            tor += factor;
+            tod += factor;
+        }
+
         return [tor, tod];
 }
 
-function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
+function calcRoc(qnh, elevation, cruise, temperature){
     let table = [
         [ 
             [0, -20,  855],
@@ -142,7 +163,9 @@ function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
             [8000, 40, 285],
             [10000, 40, 180], 
             [12000, 40, 0]  ]];
-    
+        
+        let pressAltTakeoff = calcPressAlt(qnh, elevation);
+        let pressAltCruise = pressAltTakeoff + cruise - elevation;
         // avg pressAlt for climb is 2/3 of the difference
         let pressAlt = 0.667 * (pressAltCruise - pressAltTakeoff);
 
@@ -165,24 +188,6 @@ function calcRoc(pressAltTakeoff, pressAltCruise, temperature){
         let roc = interpolate(tempFloor, tempCeil, lowerRoc, higherRoc, temperature);
         
         return roc;
-}
-
-function calcTime(pressAltTakeoff, pressAltCruise, roc){
-    let height = pressAltCruise - pressAltTakeoff;
-    let time = Math.round(height / roc);
-    return time;
-}
-
-function calcCruiseDensity(qnh, elevation, cruise, temperature){
-    let p = qnh - 1 / 27 * (cruise - elevation);
-    let T = temperature - 2 / 1000 * (cruise - elevation);
-    let rho = (p*100) / (287 * (T+273));
-    return rho;
-}
-
-function calcTas(ias, rho){
-    let tas = ias / Math.sqrt(rho / 1.225);
-    return tas;
 }
 
 function calcClimbTime(qnh, elevation, cruise, temperature){
@@ -253,4 +258,4 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
     return fuel;
 }
 
-console.log(calcClimbFuel(1013, 0, 000, 35));
+console.log(calcRoc(1013, 0, 2000, 15));
