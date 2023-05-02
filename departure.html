@@ -41,14 +41,15 @@
     </div>
     <div class="container settings mb-5">
         <div class="input-group">
-            <div class="input-group-text input-title">Airport</div>
-            <input type="number" class="form-control" placeholder="ICAO Code">
-        </div>
-        <div class="input-group">
             <div class="input-group-text input-title">Runway</div>
             <input type="number" class="form-control">
-            <div class="input-group-text input-title">TORA</div>
-            <input type="number" class="form-control" placeholder="m">
+            <div class="input-group-text input-title">Surface</div>
+            <div class="form-group dropdown-half">
+                <select class="form-control">
+                  <option>Concrete</option>
+                  <option>Grass</option>
+                </select>
+            </div>
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">Wind</div>
@@ -63,26 +64,10 @@
             <input type="number" class="form-control" placeholder="hPa">
         </div>
         <div class="input-group">
-            <div class="input-group-text input-title">Slope</div>
-            <input type="number" class="form-control" placeholder="%">
-            <div class="input-group-text input-title">Surface</div>
-            <div class="form-group dropdown-half">
-                <select class="form-control">
-                  <option>DRY</option>
-                  <option>WET</option>
-                </select>
-            </div>
-        </div>
-        <div class="input-group">
-            <div class="input-group-text input-title">Flaps</div>
-            <div class="form-group dropdown-full">
-                <select class="form-control">
-                  <option>UP</option>
-                  <option>10</option>
-                  <option>20</option>
-                  <option>FULL</option>
-                </select>
-            </div>
+            <div class="input-group-text input-title">Elevation</div>
+            <input type="number" class="form-control" placeholder="m">
+            <div class="input-group-text input-title">Cruise</div>
+            <input type="number" class="form-control" placeholder="m">
         </div>
     </div>
 
@@ -92,23 +77,27 @@
                 <h2 class="card-title">Results</h2>
                 <table class="table">
                     <tr>
-                        <th>TORR</th>
+                        <th>Takeoff Run</th>
                         <th>123</th>
                     </tr>
                     <tr>
-                        <th>TODR</th>
+                        <th>Takeoff Distance</th>
                         <th>123</th>
                     </tr>
                     <tr>
-                        <th>ASD</th>
+                        <th>Rate of Climb</th>
                         <th>123</th>
                     </tr>
                     <tr>
-                        <th>ROC</th>
+                        <th>Time to Top of Climb</th>
                         <th>123</th>
                     </tr>
                     <tr>
-                        <th>Density Alt</th>
+                        <th>Distance to Top of Climb</th>
+                        <th>123</th>
+                    </tr>
+                    <tr>
+                        <th>Fuel Burn to Top of Climb</th>
                         <th>123</th>
                     </tr>
                 </table>
