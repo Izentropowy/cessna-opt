@@ -243,8 +243,14 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
 
     let takeoffFuel = interpolate(takeoffTable[0][0], takeoffTable[1][0], takeoffTable[0][1], takeoffTable[1][1], pressAltTakeoff);
     let cruiseFuel = interpolate(cruiseTable[0][0], cruiseTable[1][0], cruiseTable[0][1], cruiseTable[1][1], pressAltCruise);
+    // 1.4 for startup and taxi
     let fuel = cruiseFuel - takeoffFuel + 1.4;
+
+    // temperature correction 10% for 10 above ISA
+    let isaTemp = 15 - 2 / 1000 * elevation;
+    let tempDeviation = temperature - isaTemp;
+    if (tempDeviation > 0) fuel += 0.01 * fuel * tempDeviation;
     return fuel;
 }
 
-console.log(calcClimbFuel(1013, 0, 000, 15));
+console.log(calcClimbFuel(1013, 0, 000, 35));
