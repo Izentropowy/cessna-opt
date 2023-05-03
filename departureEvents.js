@@ -18,6 +18,7 @@ const time = document.getElementById('time');
 const distance = document.getElementById('distance');
 const fuel = document.getElementById('fuel');
 
+const variables = Array.from(document.querySelectorAll('.form-control'));
 
 function calcAll(){
     let tor = departure.calcTorAndTod(qnh.value, elevation.value, temperature.value, windDegrees.value, windMagnitude.value, runway.value)[0];
@@ -38,8 +39,30 @@ function updateResults(){
     fuel.textContent = calcAll()[5];
 }
 
+function validate(input){
+    button.classList.remove("shake");
+    if (input.value < input.min || input.value > input.max){
+        input.classList.add("invalid");
+        button.classList.add("shake");
+        return false;
+    }
+    input.classList.remove("invalid");
+    return true;
+}
+
+function validateAll(){
+    let validator = true;
+    for (let element of variables) {
+        if (!validate(element)) validator = false;
+    }
+    return validator;
+}
 
 button.addEventListener('click', () => {
-    calcAll();
-    updateResults();
+    if (validateAll()){
+        calcAll();
+        updateResults();
+    }
 });
+
+button.addEventListener('animationend', () => button.classList.remove("shake"));

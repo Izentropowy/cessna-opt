@@ -41,8 +41,8 @@
     </div>
     <div class="container mb-3">
         <div class="input-group">
-            <div class="input-group-text input-title">Runway</div>
-            <input type="number" class="form-control" id="runway">
+            <div class="input-group-text input-title">Runway hdg</div>
+            <input type="number" class="form-control" id="runway" min="0" max="360">
             <div class="input-group-text input-title">Surface</div>
             <div class="form-group dropdown-half">
                 <select class="form-control" id="surface">
@@ -53,21 +53,21 @@
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">Wind</div>
-            <input type="number" class="form-control" placeholder="&deg;" id="wind-degrees">
+            <input type="number" class="form-control" placeholder="&deg;" id="wind-degrees" min="0" max="360">
             <div class="input-group-text input-title">Wind</div>
-            <input type="number" class="form-control" placeholder="kt" id="wind-magnitude">
+            <input type="number" class="form-control" placeholder="kt" id="wind-magnitude" min="0" max="100">
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">OAT</div>
-            <input type="number" class="form-control" placeholder="&deg;C" id="oat">
+            <input type="number" class="form-control" placeholder="&deg;C" id="oat" min="-50" max="50">
             <div class="input-group-text input-title">QNH</div>
-            <input type="number" class="form-control" placeholder="hPa" id="qnh">
+            <input type="number" class="form-control" placeholder="hPa" id="qnh" min="950" max="1050">
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">Elevation</div>
-            <input type="number" class="form-control" placeholder="m" id="elevation">
+            <input type="number" class="form-control" placeholder="ft" id="elevation" min="-1250" max="15000">
             <div class="input-group-text input-title">Cruise</div>
-            <input type="number" class="form-control" placeholder="m" id="cruise">
+        <input type="number" class="form-control" placeholder="ft" id="cruise" min="500" max="15000">
         </div>
     </div>
     <div class="container mb-3 d-flex justify-content-center">
@@ -80,27 +80,27 @@
                 <table class="table">
                     <tr>
                         <th>Takeoff Run</th>
-                        <th id="tor">123</th>
+                        <th id="tor">0</th>
                     </tr>
                     <tr>
                         <th>Takeoff Distance</th>
-                        <th id="tod">123</th>
+                        <th id="tod">0</th>
                     </tr>
                     <tr>
                         <th>Rate of Climb</th>
-                        <th id="roc">123</th>
+                        <th id="roc">0</th>
                     </tr>
                     <tr>
                         <th>Time to Top of Climb</th>
-                        <th id="time">123</th>
+                        <th id="time">0</th>
                     </tr>
                     <tr>
                         <th>Distance to Top of Climb</th>
-                        <th id="distance">123</th>
+                        <th id="distance">0</th>
                     </tr>
                     <tr>
                         <th>Fuel Burn to Top of Climb</th>
-                        <th id="fuel">123</th>
+                        <th id="fuel">0</th>
                     </tr>
                 </table>
             </div>
