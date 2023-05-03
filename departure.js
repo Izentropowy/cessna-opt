@@ -85,7 +85,7 @@ function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, headin
             [7000, 40, 2215, 4045],
             [8000, 40, 2450, 4615] ]];
         
-        let pressAlt = pressAlt(qnh, elevation);
+        let pressAlt = calcPressAlt(qnh, elevation);
 
         let pressFloor = Math.floor(pressAlt / 1000) * 1000;
         let pressCeil = Math.ceil(pressAlt / 1000) * 1000;
@@ -174,6 +174,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
 
         let tempFloor = Math.floor(temperature / 20) * 20;
         let tempCeil = Math.ceil(temperature / 20) * 20;
+     
 
         // tables only with required temperatures
         let tempReduced = [table[(tempFloor + 20) / 20], table[(tempCeil + 20) / 20]];
@@ -193,8 +194,8 @@ function calcRoc(qnh, elevation, cruise, temperature){
 function calcClimbTime(qnh, elevation, cruise, temperature){
     let pressAltTakeoff = calcPressAlt(qnh, elevation);
     let pressAltCruise = pressAltTakeoff + cruise - elevation;
-    let roc = calcRoc(pressAltTakeoff, pressAltCruise, temperature);
-    let time = Math.round((cruise - elevation) / roc);
+    let roc = calcRoc(qnh, elevation, cruise, temperature);
+    let time = (cruise - elevation) / roc;
     return time
 }
 
@@ -204,9 +205,8 @@ function calcClimbDistance(qnh, elevation, cruise, temperature,){
     // optimum IAS for climb is 73kt
     let rho = calcCruiseDensity(qnh, elevation, altClimb, temperature);
     let tas = calcTas(73, rho);
-
     let time = calcClimbTime(qnh, elevation, cruise, temperature);
-    let distance = tas * time;
+    let distance = tas * time / 60;
     return distance;
 }
 
@@ -241,8 +241,8 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
         return acc;
     },[]);
     let cruiseTable = table.reduce((acc, val) => {
-        if (val[0] == pressAltCruiseFloor || val[0] == pressAltCruiseCeil) acc.push(val);
-        if (val[0] == pressAltCruiseCeil) acc.push(val);
+        if (val[0] === pressAltCruiseFloor) acc.push(val);
+        if (val[0] === pressAltCruiseCeil) acc.push(val);
         return acc;
     },[]);
 
@@ -258,4 +258,9 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
     return fuel;
 }
 
+console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[0]);
+console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[1]);
 console.log(calcRoc(1013, 0, 2000, 15));
+console.log(calcClimbTime(1013, 0, 2000, 15));
+console.log(calcClimbDistance(1013, 0, 2000, 15));
+console.log(calcClimbFuel(1013, 0, 2000, 15));
