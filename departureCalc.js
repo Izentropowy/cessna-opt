@@ -90,7 +90,7 @@ function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, headin
 
         let pressFloor = Math.floor(pressAlt / 1000) * 1000;
         let pressCeil = Math.ceil(pressAlt / 1000) * 1000;
-
+            
         let tempFloor = Math.floor(temperature / 10) * 10;
         let tempCeil = Math.ceil(temperature / 10) * 10;
 
@@ -127,7 +127,7 @@ function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, headin
             tod += factor;
         }
 
-        return [tor, tod];
+        return [tor.toFixed(0), tod.toFixed(0)];
 }
 
 function calcRoc(qnh, elevation, cruise, temperature){
@@ -166,7 +166,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [12000, 40, 0]  ]];
         
         let pressAltTakeoff = calcPressAlt(qnh, elevation);
-        let pressAltCruise = pressAltTakeoff + cruise - elevation;
+        let pressAltCruise = parseFloat(pressAltTakeoff) + parseFloat(cruise) - elevation;
         // avg pressAlt for climb is 2/3 of the difference
         let pressAlt = 0.667 * (pressAltCruise - pressAltTakeoff);
 
@@ -189,7 +189,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
         // calc ROC
         let roc = interpolate(tempFloor, tempCeil, lowerRoc, higherRoc, temperature);
         
-        return roc;
+        return roc.toFixed(0);
 }
 
 function calcClimbTime(qnh, elevation, cruise, temperature){
@@ -197,7 +197,7 @@ function calcClimbTime(qnh, elevation, cruise, temperature){
     let pressAltCruise = pressAltTakeoff + cruise - elevation;
     let roc = calcRoc(qnh, elevation, cruise, temperature);
     let time = (cruise - elevation) / roc;
-    return time
+    return time.toFixed(0);
 }
 
 function calcClimbDistance(qnh, elevation, cruise, temperature,){
@@ -208,7 +208,7 @@ function calcClimbDistance(qnh, elevation, cruise, temperature,){
     let tas = calcTas(73, rho);
     let time = calcClimbTime(qnh, elevation, cruise, temperature);
     let distance = tas * time / 60;
-    return distance;
+    return distance.toFixed(1);
 }
 
 function calcClimbFuel(qnh, elevation, cruise, temperature,){
@@ -228,7 +228,7 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
         [12000, 5.0]];
 
     let pressAltTakeoff = calcPressAlt(qnh, elevation);
-    let pressAltCruise = pressAltTakeoff + cruise - elevation;
+    let pressAltCruise = parseFloat(pressAltTakeoff) + parseFloat(cruise) - elevation;
 
     let pressAltTakeoffFloor = Math.floor(pressAltTakeoff / 1000) * 1000;
     let pressAltTakeoffCeil = Math.ceil(pressAltTakeoff / 1000) * 1000;
@@ -246,7 +246,6 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
         if (val[0] === pressAltCruiseCeil) acc.push(val);
         return acc;
     },[]);
-
     let takeoffFuel = interpolate(takeoffTable[0][0], takeoffTable[1][0], takeoffTable[0][1], takeoffTable[1][1], pressAltTakeoff);
     let cruiseFuel = interpolate(cruiseTable[0][0], cruiseTable[1][0], cruiseTable[0][1], cruiseTable[1][1], pressAltCruise);
     // 1.4 for startup and taxi
@@ -256,7 +255,7 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
     let isaTemp = 15 - 2 / 1000 * elevation;
     let tempDeviation = temperature - isaTemp;
     if (tempDeviation > 0) fuel += 0.01 * fuel * tempDeviation;
-    return fuel;
+    return fuel.toFixed(1);
 }
 
 

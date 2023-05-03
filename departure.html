@@ -39,7 +39,7 @@
             <p class="display-5 text-center fw-normal title">Departure</p>
         </div>
     </div>
-    <div class="container settings mb-5">
+    <div class="container mb-3">
         <div class="input-group">
             <div class="input-group-text input-title">Runway</div>
             <input type="number" class="form-control" id="runway">
@@ -70,35 +70,37 @@
             <input type="number" class="form-control" placeholder="m" id="cruise">
         </div>
     </div>
-
-    <div class="container mb-5">
+    <div class="container mb-3 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary">Calculate</button>
+    </div>
+    <div class="container mb-3">
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">Results</h2>
                 <table class="table">
                     <tr>
                         <th>Takeoff Run</th>
-                        <th>123</th>
+                        <th id="tor">123</th>
                     </tr>
                     <tr>
                         <th>Takeoff Distance</th>
-                        <th>123</th>
+                        <th id="tod">123</th>
                     </tr>
                     <tr>
                         <th>Rate of Climb</th>
-                        <th>123</th>
+                        <th id="roc">123</th>
                     </tr>
                     <tr>
                         <th>Time to Top of Climb</th>
-                        <th>123</th>
+                        <th id="time">123</th>
                     </tr>
                     <tr>
                         <th>Distance to Top of Climb</th>
-                        <th>123</th>
+                        <th id="distance">123</th>
                     </tr>
                     <tr>
                         <th>Fuel Burn to Top of Climb</th>
-                        <th>123</th>
+                        <th id="fuel">123</th>
                     </tr>
                 </table>
             </div>
