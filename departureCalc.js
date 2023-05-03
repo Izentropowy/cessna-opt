@@ -1,10 +1,11 @@
+export {calcTorAndTod, calcRoc, calcClimbTime, calcClimbDistance, calcClimbFuel};
 
 function calcPressAlt(qnh, elevation){
     let pa = elevation + 30 * (1013 - qnh);
     return pa;
 }
 
-function toRadians (angle) {
+function toRadians(angle){
     return angle * (Math.PI / 180);
 }
 
@@ -258,9 +259,10 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
     return fuel;
 }
 
-console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[0]);
-console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[1]);
-console.log(calcRoc(1013, 0, 2000, 15));
-console.log(calcClimbTime(1013, 0, 2000, 15));
-console.log(calcClimbDistance(1013, 0, 2000, 15));
-console.log(calcClimbFuel(1013, 0, 2000, 15));
+
+// console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[0]);
+// console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[1]);
+// console.log(calcRoc(1013, 0, 2000, 15));
+// console.log(calcClimbTime(1013, 0, 2000, 15));
+// console.log(calcClimbDistance(1013, 0, 2000, 15));
+// console.log(calcClimbFuel(1013, 0, 2000, 15));

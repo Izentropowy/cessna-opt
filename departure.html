@@ -7,7 +7,7 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
-    <script src="departure.js" defer></script>
+    <script type="module" src="departureEvents.js" defer></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark py-4 mb-md-4 ">
@@ -42,10 +42,10 @@
     <div class="container settings mb-5">
         <div class="input-group">
             <div class="input-group-text input-title">Runway</div>
-            <input type="number" class="form-control">
+            <input type="number" class="form-control" id="runway">
             <div class="input-group-text input-title">Surface</div>
             <div class="form-group dropdown-half">
-                <select class="form-control">
+                <select class="form-control" id="surface">
                   <option>Concrete</option>
                   <option>Grass</option>
                 </select>
@@ -53,21 +53,21 @@
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">Wind</div>
-            <input type="number" class="form-control" placeholder="&deg;">
+            <input type="number" class="form-control" placeholder="&deg;" id="wind-degrees">
             <div class="input-group-text input-title">Wind</div>
-            <input type="number" class="form-control" placeholder="kt">
+            <input type="number" class="form-control" placeholder="kt" id="wind-magnitude">
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">OAT</div>
-            <input type="number" class="form-control" placeholder="&deg;C">
+            <input type="number" class="form-control" placeholder="&deg;C" id="oat">
             <div class="input-group-text input-title">QNH</div>
-            <input type="number" class="form-control" placeholder="hPa">
+            <input type="number" class="form-control" placeholder="hPa" id="qnh">
         </div>
         <div class="input-group">
             <div class="input-group-text input-title">Elevation</div>
-            <input type="number" class="form-control" placeholder="m">
+            <input type="number" class="form-control" placeholder="m" id="elevation">
             <div class="input-group-text input-title">Cruise</div>
-            <input type="number" class="form-control" placeholder="m">
+            <input type="number" class="form-control" placeholder="m" id="cruise">
         </div>
     </div>
 
