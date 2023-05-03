@@ -86,6 +86,8 @@ function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, headin
             [7000, 40, 2215, 4045],
             [8000, 40, 2450, 4615] ]];
         
+        if (temperature < 0) temperature = 0;
+
         let pressAlt = calcPressAlt(qnh, elevation);
 
         let pressFloor = Math.floor(pressAlt / 1000) * 1000;
@@ -165,6 +167,8 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [10000, 40, 180], 
             [12000, 40, 0]  ]];
         
+        if (temperature < -20) temperature = -20;
+
         let pressAltTakeoff = calcPressAlt(qnh, elevation);
         let pressAltCruise = parseFloat(pressAltTakeoff) + parseFloat(cruise) - elevation;
         // avg pressAlt for climb is 2/3 of the difference

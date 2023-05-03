@@ -40,8 +40,7 @@ function updateResults(){
 }
 
 function validate(input){
-    button.classList.remove("shake");
-    if (input.value < input.min || input.value > input.max){
+    if (parseFloat(input.value) < input.min || parseFloat(input.value) > input.max || input.value == ""){
         input.classList.add("invalid");
         button.classList.add("shake");
         return false;
