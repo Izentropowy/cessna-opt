@@ -1,4 +1,4 @@
-export {calcTorAndTod, calcRoc, calcClimbTime, calcClimbDistance, calcClimbFuel};
+export {calcTorAndTod, calcRoc, calcClimbTime, calcClimbDistance, calcClimbFuel, calcPressAlt};
 
 function calcPressAlt(qnh, elevation){
     let pa = parseFloat(elevation) + 30 * (1013 - qnh);
@@ -148,9 +148,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, -20, 575],
             [8000, -20, 465], 
             [10000, -20, 360], 
-            [12000, -20, 255],
-            [14000, -20, 150],
-            [16000, -20, 0] ],
+            [12000, -20, 255], ],
     
         [   [0, 0,  785],
             [2000, 0, 695],
@@ -158,9 +156,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, 0, 515],
             [8000, 0, 405], 
             [10000, 0, 300], 
-            [12000, 0, 195],
-            [14000, -20, 90],
-            [16000, -20, 0] ],
+            [12000, 0, 195],],
     
         [   [0, 20,  710],
             [2000, 20, 625],
@@ -168,9 +164,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, 20, 450],
             [8000, 20, 345],
             [10000, 20, 240], 
-            [12000, 20, 135],
-            [14000, -20, 30],
-            [16000, -20, 0]  ],
+            [12000, 20, 135],  ],
     
         [   [0, 40, 645],
             [2000, 40, 560],
@@ -178,9 +172,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, 40, 390],
             [8000, 40, 285],
             [10000, 40, 180], 
-            [12000, 40, 0],
-            [14000, 40, 0],
-            [16000, 40, 0]  ]];
+            [12000, 40, 0],  ]];
 
         if (temperature < -20) temperature = -20;
 

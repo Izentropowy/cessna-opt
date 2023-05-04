@@ -45,11 +45,26 @@ function validate(input){
         button.classList.add("shake");
         return false;
     }
-    else if ((input === elevation || input === cruise) && elevation.value >= cruise.value){
+    else if ((input === elevation || input === cruise) && parseFloat(elevation.value) >= parseFloat(cruise.value)){
         input.classList.add("invalid");
         button.classList.add("shake");
         return false;
     }
+    // max pa value in tables
+    else if (input === elevation && departure.calcPressAlt(qnh.value, elevation.value) > 8000 ){
+        input.classList.add("invalid");
+        button.classList.add("shake");
+        console.log('la');
+        return false;
+    }
+    // max pa value in tables
+    else if (input === cruise && departure.calcPressAlt(qnh.value, cruise.value) > 12000 ){
+        input.classList.add("invalid");
+        button.classList.add("shake");
+        console.log('lala');
+        return false;
+    }
+
     input.classList.remove("invalid");
     return true;
 }
