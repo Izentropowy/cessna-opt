@@ -48,20 +48,20 @@ function validate(input){
     else if ((input === elevation || input === cruise) && parseFloat(elevation.value) >= parseFloat(cruise.value)){
         input.classList.add("invalid");
         button.classList.add("shake");
+        alert("Pressure altitude is too high");
         return false;
     }
     // max pa value in tables
     else if (input === elevation && departure.calcPressAlt(qnh.value, elevation.value) > 8000 ){
         input.classList.add("invalid");
         button.classList.add("shake");
-        console.log('la');
+        alert("Pressure altitude is too high");
         return false;
     }
     // max pa value in tables
     else if (input === cruise && departure.calcPressAlt(qnh.value, cruise.value) > 12000 ){
         input.classList.add("invalid");
         button.classList.add("shake");
-        console.log('lala');
         return false;
     }
 

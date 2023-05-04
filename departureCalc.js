@@ -1,38 +1,37 @@
-export {calcTorAndTod, calcRoc, calcClimbTime, calcClimbDistance, calcClimbFuel, calcPressAlt};
 
-function calcPressAlt(qnh, elevation){
+export function calcPressAlt(qnh, elevation){
     let pa = parseFloat(elevation) + 30 * (1013 - qnh);
     return pa;
 }
 
-function toRadians(angle){
+export function toRadians(angle){
     return angle * (Math.PI / 180);
 }
 
-function calcwindComponent(direction, magnitude, heading){
+export function calcwindComponent(direction, magnitude, heading){
     let angle = toRadians(Math.abs(direction - heading));
     let hwc = magnitude * Math.cos(angle);
     return hwc;
 }
 
-function calcCruiseDensity(qnh, elevation, cruise, temperature){
+export function calcCruiseDensity(qnh, elevation, cruise, temperature){
     let p = qnh - 1 / 27 * (cruise - elevation);
     let T = temperature - 2 / 1000 * (cruise - elevation);
     let rho = (p * 100) / (287 * (T + 273));
     return rho;
 }
 
-function calcTas(ias, rho){
+export function calcTas(ias, rho){
     let tas = ias / Math.sqrt(rho / 1.225);
     return tas;
 }
 
-function interpolate(x1, x2, y1, y2, x){
+export function interpolate(x1, x2, y1, y2, x){
     if (x1 === x2) return y1;
     return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 }
 
-function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, heading, surface)
+export function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, heading, surface)
 {
     let table = [
         [ 
@@ -139,7 +138,7 @@ function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, headin
         return [tor.toFixed(0), tod.toFixed(0)];
 }
 
-function calcRoc(qnh, elevation, cruise, temperature){
+export function calcRoc(qnh, elevation, cruise, temperature){
     let table = [
         [ 
             [0, -20,  855],
@@ -204,7 +203,7 @@ function calcRoc(qnh, elevation, cruise, temperature){
         return roc.toFixed(0);
 }
 
-function calcClimbTime(qnh, elevation, cruise, temperature){
+export function calcClimbTime(qnh, elevation, cruise, temperature){
     let pressAltTakeoff = calcPressAlt(qnh, elevation);
     let pressAltCruise = pressAltTakeoff + cruise - elevation;
     let roc = calcRoc(qnh, elevation, cruise, temperature);
@@ -212,7 +211,7 @@ function calcClimbTime(qnh, elevation, cruise, temperature){
     return time.toFixed(0);
 }
 
-function calcClimbDistance(qnh, elevation, cruise, temperature,){
+export function calcClimbDistance(qnh, elevation, cruise, temperature,){
     // avg pressAlt for climb is 2/3 of the difference
     let altClimb = 0.667 * (cruise - elevation);
     // optimum IAS for climb is 73kt
@@ -223,7 +222,7 @@ function calcClimbDistance(qnh, elevation, cruise, temperature,){
     return distance.toFixed(1);
 }
 
-function calcClimbFuel(qnh, elevation, cruise, temperature,){
+export function calcClimbFuel(qnh, elevation, cruise, temperature,){
     let table = [
         [0, 0],
         [1000, 0.4],
