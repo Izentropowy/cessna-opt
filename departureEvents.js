@@ -21,8 +21,8 @@ const fuel = document.getElementById('fuel');
 const variables = Array.from(document.querySelectorAll('.form-control'));
 
 function calcAll(){
-    let tor = departure.calcTorAndTod(qnh.value, elevation.value, temperature.value, windDegrees.value, windMagnitude.value, runway.value)[0];
-    let tod = departure.calcTorAndTod(qnh.value, elevation.value, temperature.value, windDegrees.value, windMagnitude.value, runway.value)[1];    
+    let tor = departure.calcTorAndTod(qnh.value, elevation.value, temperature.value, windDegrees.value, windMagnitude.value, runway.value, surface.value)[0];
+    let tod = departure.calcTorAndTod(qnh.value, elevation.value, temperature.value, windDegrees.value, windMagnitude.value, runway.value, surface.value)[1];    
     let roc = departure.calcRoc(qnh.value, elevation.value, cruise.value, temperature.value);
     let time = departure.calcClimbTime(qnh.value, elevation.value, cruise.value, temperature.value);
     let distance = departure.calcClimbDistance(qnh.value, elevation.value, cruise.value, temperature.value);
@@ -31,16 +31,21 @@ function calcAll(){
 }
 
 function updateResults(){
-    tor.textContent = calcAll()[0];
-    tod.textContent = calcAll()[1];
-    roc.textContent = calcAll()[2];
-    time.textContent = calcAll()[3];
-    distance.textContent = calcAll()[4];
-    fuel.textContent = calcAll()[5];
+    tor.textContent = calcAll()[0] + ' m';
+    tod.textContent = calcAll()[1] + ' m';
+    roc.textContent = calcAll()[2] + ' fpm';
+    time.textContent = calcAll()[3] + ' min';
+    distance.textContent = calcAll()[4] + ' nm';
+    fuel.textContent = calcAll()[5] + ' l';
 }
 
 function validate(input){
     if (parseFloat(input.value) < input.min || parseFloat(input.value) > input.max || input.value == ""){
+        input.classList.add("invalid");
+        button.classList.add("shake");
+        return false;
+    }
+    else if ((input === elevation || input === cruise) && elevation.value >= cruise.value){
         input.classList.add("invalid");
         button.classList.add("shake");
         return false;

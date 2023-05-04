@@ -1,7 +1,7 @@
 export {calcTorAndTod, calcRoc, calcClimbTime, calcClimbDistance, calcClimbFuel};
 
 function calcPressAlt(qnh, elevation){
-    let pa = elevation + 30 * (1013 - qnh);
+    let pa = parseFloat(elevation) + 30 * (1013 - qnh);
     return pa;
 }
 
@@ -85,10 +85,13 @@ function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, headin
             [6000, 40, 2010, 3585],
             [7000, 40, 2215, 4045],
             [8000, 40, 2450, 4615] ]];
-        
+
+        // on the safe side
         if (temperature < 0) temperature = 0;
 
         let pressAlt = calcPressAlt(qnh, elevation);
+        // on the safe side
+        if (pressAlt < 0) pressAlt = 0;
 
         let pressFloor = Math.floor(pressAlt / 1000) * 1000;
         let pressCeil = Math.ceil(pressAlt / 1000) * 1000;
@@ -123,11 +126,15 @@ function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, headin
         }
 
         // surface correction
-        if (surface === "grass"){
-            let factor = 1.15 * tor;
+        if (surface === "Grass"){
+            let factor = 0.15 * tor;
             tor += factor;
             tod += factor;
         }
+
+        // feet to meters
+        tor *= 0.3048;
+        tod *= 0.3048;
 
         return [tor.toFixed(0), tod.toFixed(0)];
 }
@@ -141,7 +148,9 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, -20, 575],
             [8000, -20, 465], 
             [10000, -20, 360], 
-            [12000, -20, 255] ],
+            [12000, -20, 255],
+            [14000, -20, 150],
+            [16000, -20, 0] ],
     
         [   [0, 0,  785],
             [2000, 0, 695],
@@ -149,7 +158,9 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, 0, 515],
             [8000, 0, 405], 
             [10000, 0, 300], 
-            [12000, 0, 195] ],
+            [12000, 0, 195],
+            [14000, -20, 90],
+            [16000, -20, 0] ],
     
         [   [0, 20,  710],
             [2000, 20, 625],
@@ -157,7 +168,9 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, 20, 450],
             [8000, 20, 345],
             [10000, 20, 240], 
-            [12000, 20, 135]  ],
+            [12000, 20, 135],
+            [14000, -20, 30],
+            [16000, -20, 0]  ],
     
         [   [0, 40, 645],
             [2000, 40, 560],
@@ -165,11 +178,14 @@ function calcRoc(qnh, elevation, cruise, temperature){
             [6000, 40, 390],
             [8000, 40, 285],
             [10000, 40, 180], 
-            [12000, 40, 0]  ]];
-        
+            [12000, 40, 0],
+            [14000, 40, 0],
+            [16000, 40, 0]  ]];
+
         if (temperature < -20) temperature = -20;
 
         let pressAltTakeoff = calcPressAlt(qnh, elevation);
+        if (pressAltTakeoff < 0) pressAltTakeoff = 0;
         let pressAltCruise = parseFloat(pressAltTakeoff) + parseFloat(cruise) - elevation;
         // avg pressAlt for climb is 2/3 of the difference
         let pressAlt = 0.667 * (pressAltCruise - pressAltTakeoff);
@@ -232,6 +248,7 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
         [12000, 5.0]];
 
     let pressAltTakeoff = calcPressAlt(qnh, elevation);
+    if (pressAltTakeoff < 0) pressAltTakeoff = 0;
     let pressAltCruise = parseFloat(pressAltTakeoff) + parseFloat(cruise) - elevation;
 
     let pressAltTakeoffFloor = Math.floor(pressAltTakeoff / 1000) * 1000;
@@ -259,13 +276,9 @@ function calcClimbFuel(qnh, elevation, cruise, temperature,){
     let isaTemp = 15 - 2 / 1000 * elevation;
     let tempDeviation = temperature - isaTemp;
     if (tempDeviation > 0) fuel += 0.01 * fuel * tempDeviation;
+
+    // gallons to litres
+    fuel *= 3.785;
     return fuel.toFixed(1);
 }
 
-
-// console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[0]);
-// console.log(calcTorAndTod(1013, 0, 15, 250, 10, 300, "grass")[1]);
-// console.log(calcRoc(1013, 0, 2000, 15));
-// console.log(calcClimbTime(1013, 0, 2000, 15));
-// console.log(calcClimbDistance(1013, 0, 2000, 15));
-// console.log(calcClimbFuel(1013, 0, 2000, 15));
