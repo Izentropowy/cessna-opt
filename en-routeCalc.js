@@ -1,7 +1,8 @@
+import { calcPressAlt, interpolate } from "./departureCalc.js";
 
-function calc(){
+function calc(qnh, cruise, isaDev, mcp){
     
-    let table1 = [
+    let table = [[
         [
             [2000, 2550, -20, 83, 117, 11.1],
             [2000, 2500, -20, 78, 115, 10.6],
@@ -50,9 +51,9 @@ function calc(){
             [12000, 2500, -20, 58, 111, 8.3],
             [12000, 2400, -20, 52, 105, 7.5],
             [12000, 2300, -20, 47, 98, 6.9]],
-    ];
+    ],
 
-    let table2 = [
+    [
         [
             [2000, 2550, 0, 77, 118, 10.5],
             [2000, 2500, 0, 73, 115, 9.9],
@@ -101,9 +102,9 @@ function calc(){
             [12000, 2500, 0, 54, 109, 7.8],
             [12000, 2400, 0, 49, 102, 7.1],
             [12000, 2300, 0, 44, 95, 6.6]],
-    ];
+    ],
 
-    let table3 = [
+    [
         [
             [2000, 2550, 20, 72, 117, 9.9],
             [2000, 2500, 20, 68, 115, 9.4],
@@ -152,5 +153,65 @@ function calc(){
             [12000, 2500, 20, 51, 107, 7.4],
             [12000, 2400, 20, 46, 100, 6.8],
             [12000, 2300, 20, 41, 92, 6.3]],
-    ];
+    ]];
+
+    let pressAlt = calcPressAlt(qnh, 0);
+    let pressAltCruise = parseFloat(pressAlt) + parseFloat(cruise);
+
+    let pressFloor = Math.floor(pressAltCruise / 2000) * 2000;
+    let pressCeil = Math.ceil(pressAltCruise / 2000) * 2000;
+
+    let tempFloor = Math.floor(isaDev / 20) * 20;
+    let tempCeil = Math.ceil(isaDev / 20) * 20;
+
+    // tables only with required temperatures
+    let tempReduced = [table[(tempFloor + 20) / 20], table[(tempCeil + 20) / 20]];
+    
+    // for each temperature table find 2 correspoding pressure tables
+    let pressReducedLowTemp = [tempReduced[0][pressFloor / 1000 - 2], tempReduced[0][pressCeil / 1000 - 3]];
+    let pressReducedHighTemp = [tempReduced[1][pressFloor / 1000 - 2], tempReduced[1][pressCeil / 1000 - 3]];
+    
+    // let lowerRpm = interpolate(pressFloor, pressCeil, pressReducedLowTemp[0][1])
+    // let lowerMcp =
+    // let lowerTas =
+    // let lowerFuel =
+
+    // let higherRpm =
+    // let higherMcp =
+    // let higherTas =
+    // let higherFuel =
+
+
+
+
+    // // for each pressure table find 2 mcp corresponding rows 
+    // let mcpReducedLowTemp;
+    // let mcpReducedHighTemp;
+    // switch(mcp) {
+    //     case "max":
+    //         mcpReducedLowTemp = pressReducedLowTemp[0]
+    //         break;
+    //     case "75%":
+    //         break;
+    //     case "65%":
+    //         break;
+    //     case "55%":
+    //         break;
+    //     case "45%":
+    //         break;
+    //     case "min":
+    //         break;
+    // }
+    console.log(pressReducedLowTemp);
+    console.log(findCorrespondingRow(52, pressReducedLowTemp[0], 3));
+}
+
+calc(1013, 3000, 10, "max");
+
+function findCorrespondingRow(value, arr, col){
+    let searchedCol = [];
+    for (let i = 0; i < arr.length; i++) searchedCol.push(arr[i][col]);
+    if (!searchedCol.includes(value)) searchedCol.push(value);
+    searchedCol.sort().reverse();
+    return searchedCol;
 }
