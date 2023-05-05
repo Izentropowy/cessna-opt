@@ -38,56 +38,48 @@
             <p class="display-5 text-center fw-normal title">En-Route</p>
         </div>
     </div>
-    <div class="container settings mb-5">
+    <div class="container mb-3">
         <div class="input-group">
-            <div class="input-group-text input-title">Cruise Alt</div>
-            <input type="number" class="form-control" placeholder="ft">
+            <div class="input-group-text input-title">MCP</div>
+            <div class="form-group dropdown-full">
+                <select class="form-control" id="mcp">
+                  <option>Maximum</option>
+                  <option>75%</option>
+                  <option>65%</option>
+                  <option>55%</option>
+                  <option>45%</option>
+                  <option>Long range</option>
+                </select>
+            </div>
         </div>
         <div class="input-group">
-            <div class="input-group-text input-title">Temp</div>
-            <input type="number" class="form-control" placeholder="&deg;">
-            <div class="input-group-text input-title">Distance</div>
-            <input type="number" class="form-control" placeholder="NM">
+            <div class="input-group-text input-title">Cruise</div>
+            <input type="number" class="form-control" placeholder="hPa" id="cruise" min="500" max="15000">
+            <div class="input-group-text input-title">ISA dev</div>
+            <input type="number" class="form-control" placeholder="&deg;C" id="oat" min="-40" max="40">
         </div>
         <div class="input-group">
-            <div class="input-group-text input-title">Avg Wind</div>
-            <input type="number" class="form-control" placeholder="&deg;">
-            <div class="input-group-text input-title">Avg Wind</div>
-            <input type="number" class="form-control" placeholder="kt">
-        </div>
-        <div class="input-group">
-            <div class="input-group-text input-title">Flight Rules</div>
-            <input type="number" class="form-control">
+            <div class="input-group-text input-title">Wind</div>
+            <input type="number" class="form-control" placeholder="&deg;" id="wind-degrees" min="0" max="360">
+            <div class="input-group-text input-title">Wind</div>
+            <input type="number" class="form-control" placeholder="kt" id="wind-magnitude" min="0" max="100">
         </div>
     </div>
-    <div class="container">
+    <div class="container mb-3 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary">Calculate</button>
+    </div>
+    <div class="container mb-3">
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">Results</h2>
                 <table class="table">
                     <tr>
-                        <th>Power setting</th>
-                        <th>123</th>
+                        <th>Ground Roll</th>
+                        <th id="ld1">0</th>
                     </tr>
                     <tr>
-                        <th>Fuel flow</th>
-                        <th>123</th>
-                    </tr>
-                    <tr>
-                        <th>TAS</th>
-                        <th>123</th>
-                    </tr>
-                    <tr>
-                        <th>Range</th>
-                        <th>123</th>
-                    </tr>
-                    <tr>
-                        <th>Fuel req (dest)</th>
-                        <th>123</th>
-                    </tr>
-                    <tr>
-                        <th>ETE</th>
-                        <th>123</th>
+                        <th>Landing Distance</th>
+                        <th id="ld2">0</th>
                     </tr>
                 </table>
             </div>

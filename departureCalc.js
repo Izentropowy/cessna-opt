@@ -31,8 +31,8 @@ export function interpolate(x1, x2, y1, y2, x){
     return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 }
 
-export function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, heading, surface)
-{
+export function calcTorAndTod(qnh, elevation, temperature, direction, magnitude, heading, surface){
+    
     let table = [
         [ 
             [   0, 0,  860, 1465],
