@@ -1,5 +1,32 @@
 import { calcPressAlt, interpolate } from "./departureCalc.js";
 
+function findCorrespondingRows(value, arr){
+    if (value === "max") return [arr[0], arr[0]];
+    else if (value === "min") return [arr[arr.length - 1], arr[arr.length - 1]];
+    else value = parseFloat(value);
+
+    const searchedCol = arr.map(row => row[3]);
+    if (searchedCol.includes(value)) return [arr[searchedCol.indexOf(value)], arr[searchedCol.indexOf(value)]];
+
+    searchedCol.push(value);
+    searchedCol.sort().reverse();
+    return [arr[searchedCol.indexOf(value) - 1], arr[searchedCol.indexOf(value)]];
+}
+
+function isMcpAvailable(mcp, arr){
+    if (mcp === "max" || mcp === "min") return true;
+    let value = parseFloat(mcp);
+    // if outside of an array
+    if (value > arr[0][3] || value < arr[arr.length - 1][3]) return false;
+    return true;
+}
+
+function calcPressAltCruise(qnh, cruise){
+    let pressAlt = calcPressAlt(qnh, 0);
+    let pressAltCruise = parseFloat(pressAlt) + parseFloat(cruise);
+    return pressAltCruise;
+}
+
 function calc(qnh, cruise, isaDev, mcp){
     
     let table = [[
@@ -155,8 +182,7 @@ function calc(qnh, cruise, isaDev, mcp){
             [12000, 2300, 20, 41, 92, 6.3]],
     ]];
 
-    let pressAlt = calcPressAlt(qnh, 0);
-    let pressAltCruise = parseFloat(pressAlt) + parseFloat(cruise);
+    let pressAltCruise = calcPressAltCruise(qnh, cruise);
 
     let pressFloor = Math.floor(pressAltCruise / 2000) * 2000;
     let pressCeil = Math.ceil(pressAltCruise / 2000) * 2000;
@@ -220,29 +246,41 @@ function calc(qnh, cruise, isaDev, mcp){
     let tas = interpolate(tempFloor, tempCeil, tasLowTemp, tasHighTemp, isaDev);
     let fuel = interpolate(tempFloor, tempCeil, fuelLowTemp, fuelHighTemp, isaDev);
 
+    calcRange(qnh, cruise, mcp)
     return [rpm, tas, fuel];
 }
 
-function findCorrespondingRows(value, arr){
-    if (value === "max") return [0, 0];
-    else if (value === "min") return [arr.length - 1, arr.length - 1];
-    else value = parseFloat(value);
-
-    const searchedCol = arr.map(row => row[3]);
-    if (searchedCol.includes(value)) return [arr[searchedCol.indexOf(value)], arr[searchedCol.indexOf(value)]];
-
-    searchedCol.push(value);
-    searchedCol.sort().reverse();
-    return [arr[searchedCol.indexOf(value) - 1], arr[searchedCol.indexOf(value)]];
+function calcRange(qnh, cruise, mcp){
+    let pressAltCruise = calcPressAltCruise(qnh, cruise);
+    let range;
+    switch(mcp){
+        // linear functions derived from POH
+        case 'max':
+            range = (pressAltCruise + 30375) / 75;
+            console.log(range);
+            break;
+        case '75%':
+            range = (pressAltCruise + 210375) / 425;
+            console.log(range);
+            break;
+        case '65%':
+            range = (pressAltCruise + 214000) / 400;
+            console.log(range);
+            break;
+        case '55%':
+            range = (pressAltCruise + 351000) / 600;
+            console.log(range);
+            break;
+        case '45%':
+            range = (pressAltCruise + 756000) / 1200;
+            console.log(range);
+            break;
+        case 'min':
+            range = (pressAltCruise + 210375) / 425;
+            console.log(range);
+            break;
+    }
 }
 
-function isMcpAvailable(mcp, arr){
-    if (mcp === "max" || mcp === "min") return true;
-    let value = parseFloat(mcp);
-    // if outside of an array
-    if (value > arr[0][3] || value < arr[arr.length - 1][3]) return false;
-    return true;
-}
-
-let results = calc(1013, 6000, 0, "73%");
+let results = calc(1013, 8000, 0, "45%");
 console.log(results);
