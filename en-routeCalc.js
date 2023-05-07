@@ -171,47 +171,78 @@ function calc(qnh, cruise, isaDev, mcp){
     let pressReducedLowTemp = [tempReduced[0][pressFloor / 1000 - 2], tempReduced[0][pressCeil / 1000 - 3]];
     let pressReducedHighTemp = [tempReduced[1][pressFloor / 1000 - 2], tempReduced[1][pressCeil / 1000 - 3]];
     
-    // let lowerRpm = interpolate(pressFloor, pressCeil, pressReducedLowTemp[0][1])
-    // let lowerMcp =
-    // let lowerTas =
-    // let lowerFuel =
+    // check if mcp is within range for current values
+    if (!isMcpAvailable(mcp, pressReducedLowTemp[0])) return false;
+    if (!isMcpAvailable(mcp, pressReducedLowTemp[1])) return false;
+    if (!isMcpAvailable(mcp, pressReducedHighTemp[0])) return false;
+    if (!isMcpAvailable(mcp, pressReducedHighTemp[1])) return false;
 
-    // let higherRpm =
-    // let higherMcp =
-    // let higherTas =
-    // let higherFuel =
+    // find values for lower temp
+    let row1lowPressureLowTemp = findCorrespondingRows(mcp, pressReducedLowTemp[0])[0];
+    let row2lowPressureLowTemp = findCorrespondingRows(mcp, pressReducedLowTemp[0])[1];
 
+    let rpmlowPressureLowTemp = interpolate(row1lowPressureLowTemp[3], row2lowPressureLowTemp[3], row1lowPressureLowTemp[1], row2lowPressureLowTemp[1], parseFloat(mcp));
+    let taslowPressureLowTemp = interpolate(row1lowPressureLowTemp[3], row2lowPressureLowTemp[3], row1lowPressureLowTemp[4], row2lowPressureLowTemp[4], parseFloat(mcp));
+    let fuellowPressureLowTemp = interpolate(row1lowPressureLowTemp[3], row2lowPressureLowTemp[3], row1lowPressureLowTemp[5], row2lowPressureLowTemp[5], parseFloat(mcp));
 
+    let row1highPressureLowTemp = findCorrespondingRows(mcp, pressReducedLowTemp[1])[0];
+    let row2highPressureLowTemp = findCorrespondingRows(mcp, pressReducedLowTemp[1])[1];
 
+    let rpmhighPressureLowTemp = interpolate(row1highPressureLowTemp[3], row2highPressureLowTemp[3], row1highPressureLowTemp[1], row2highPressureLowTemp[1], parseFloat(mcp));
+    let tashighPressureLowTemp = interpolate(row1highPressureLowTemp[3], row2highPressureLowTemp[3], row1highPressureLowTemp[4], row2highPressureLowTemp[4], parseFloat(mcp));
+    let fuelhighPressureLowTemp = interpolate(row1highPressureLowTemp[3], row2highPressureLowTemp[3], row1highPressureLowTemp[5], row2highPressureLowTemp[5], parseFloat(mcp));
+    
+    let rpmLowTemp = interpolate(pressFloor, pressCeil, rpmlowPressureLowTemp, rpmhighPressureLowTemp, pressAltCruise);
+    let tasLowTemp = interpolate(pressFloor, pressCeil, taslowPressureLowTemp, tashighPressureLowTemp, pressAltCruise);
+    let fuelLowTemp = interpolate(pressFloor, pressCeil, fuellowPressureLowTemp, fuelhighPressureLowTemp, pressAltCruise);
+    
+    // find values for higher temp
+    let row1lowPressureHighTemp = findCorrespondingRows(mcp, pressReducedHighTemp[0])[0];
+    let row2lowPressureHighTemp = findCorrespondingRows(mcp, pressReducedHighTemp[0])[1];
+ 
+    let rpmlowPressureHighTemp = interpolate(row1lowPressureHighTemp[3], row2lowPressureHighTemp[3], row1lowPressureHighTemp[1], row2lowPressureHighTemp[1], parseFloat(mcp));
+    let taslowPressureHighTemp = interpolate(row1lowPressureHighTemp[3], row2lowPressureHighTemp[3], row1lowPressureHighTemp[4], row2lowPressureHighTemp[4], parseFloat(mcp));
+    let fuellowPressureHighTemp = interpolate(row1lowPressureHighTemp[3], row2lowPressureHighTemp[3], row1lowPressureHighTemp[5], row2lowPressureHighTemp[5], parseFloat(mcp));
 
-    // // for each pressure table find 2 mcp corresponding rows 
-    // let mcpReducedLowTemp;
-    // let mcpReducedHighTemp;
-    // switch(mcp) {
-    //     case "max":
-    //         mcpReducedLowTemp = pressReducedLowTemp[0]
-    //         break;
-    //     case "75%":
-    //         break;
-    //     case "65%":
-    //         break;
-    //     case "55%":
-    //         break;
-    //     case "45%":
-    //         break;
-    //     case "min":
-    //         break;
-    // }
-    console.log(pressReducedLowTemp);
-    console.log(findCorrespondingRow(52, pressReducedLowTemp[0], 3));
+    let row1highPressureHighTemp = findCorrespondingRows(mcp, pressReducedHighTemp[1])[0];
+    let row2highPressureHighTemp = findCorrespondingRows(mcp, pressReducedHighTemp[1])[1];
+
+    let rpmhighPressureHighTemp = interpolate(row1highPressureHighTemp[3], row2highPressureHighTemp[3], row1highPressureHighTemp[1], row2highPressureHighTemp[1], parseFloat(mcp));
+    let tashighPressureHighTemp = interpolate(row1highPressureHighTemp[3], row2highPressureHighTemp[3], row1highPressureHighTemp[4], row2highPressureHighTemp[4], parseFloat(mcp));
+    let fuelhighPressureHighTemp = interpolate(row1highPressureHighTemp[3], row2highPressureHighTemp[3], row1highPressureHighTemp[5], row2highPressureHighTemp[5], parseFloat(mcp));
+    
+    let rpmHighTemp = interpolate(pressFloor, pressCeil, rpmlowPressureHighTemp, rpmhighPressureHighTemp, pressAltCruise);
+    let tasHighTemp = interpolate(pressFloor, pressCeil, taslowPressureHighTemp, tashighPressureHighTemp, pressAltCruise);
+    let fuelHighTemp = interpolate(pressFloor, pressCeil, fuellowPressureHighTemp, fuelhighPressureHighTemp, pressAltCruise);
+    
+    // find final values
+    let rpm = interpolate(tempFloor, tempCeil, rpmLowTemp, rpmHighTemp, isaDev);
+    let tas = interpolate(tempFloor, tempCeil, tasLowTemp, tasHighTemp, isaDev);
+    let fuel = interpolate(tempFloor, tempCeil, fuelLowTemp, fuelHighTemp, isaDev);
+
+    return [rpm, tas, fuel];
 }
 
-calc(1013, 3000, 10, "max");
+function findCorrespondingRows(value, arr){
+    if (value === "max") return [0, 0];
+    else if (value === "min") return [arr.length - 1, arr.length - 1];
+    else value = parseFloat(value);
 
-function findCorrespondingRow(value, arr, col){
-    let searchedCol = [];
-    for (let i = 0; i < arr.length; i++) searchedCol.push(arr[i][col]);
-    if (!searchedCol.includes(value)) searchedCol.push(value);
+    const searchedCol = arr.map(row => row[3]);
+    if (searchedCol.includes(value)) return [arr[searchedCol.indexOf(value)], arr[searchedCol.indexOf(value)]];
+
+    searchedCol.push(value);
     searchedCol.sort().reverse();
-    return searchedCol;
+    return [arr[searchedCol.indexOf(value) - 1], arr[searchedCol.indexOf(value)]];
 }
+
+function isMcpAvailable(mcp, arr){
+    if (mcp === "max" || mcp === "min") return true;
+    let value = parseFloat(mcp);
+    // if outside of an array
+    if (value > arr[0][3] || value < arr[arr.length - 1][3]) return false;
+    return true;
+}
+
+let results = calc(1000, 6000, 10, "50%");
+console.log(results);
