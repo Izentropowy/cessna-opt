@@ -246,7 +246,8 @@ function calc(qnh, cruise, isaDev, mcp){
     let tas = interpolate(tempFloor, tempCeil, tasLowTemp, tasHighTemp, isaDev);
     let fuel = interpolate(tempFloor, tempCeil, fuelLowTemp, fuelHighTemp, isaDev);
 
-    calcRange(qnh, cruise, mcp)
+    calcRange(qnh, cruise, mcp);
+    calcEndurance(qnh, cruise, mcp);
     return [rpm, tas, fuel];
 }
 
@@ -257,30 +258,50 @@ function calcRange(qnh, cruise, mcp){
         // linear functions derived from POH
         case 'max':
             range = (pressAltCruise + 30375) / 75;
-            console.log(range);
             break;
         case '75%':
             range = (pressAltCruise + 210375) / 425;
-            console.log(range);
             break;
         case '65%':
             range = (pressAltCruise + 214000) / 400;
-            console.log(range);
             break;
         case '55%':
             range = (pressAltCruise + 351000) / 600;
-            console.log(range);
             break;
         case '45%':
             range = (pressAltCruise + 756000) / 1200;
-            console.log(range);
             break;
         case 'min':
             range = (pressAltCruise + 210375) / 425;
-            console.log(range);
             break;
     }
 }
 
-let results = calc(1013, 8000, 0, "45%");
+function calcEndurance(qnh, cruise, mcp){
+    let pressAltCruise = calcPressAltCruise(qnh, cruise);
+    let endurance;
+    switch(mcp){
+        // linear functions derived from POH
+        case 'max':
+            endurance = (pressAltCruise + 15714.3) / 5714.29;
+            break;
+        case '75%':
+            endurance = (-pressAltCruise + 688000) / 160000;
+            break;
+        case '65%':
+            endurance = (-pressAltCruise + 594000) / 120000;
+            break;
+        case '55%':
+            endurance = (-pressAltCruise + 348000) / 60000;
+            break;
+        case '45%':
+            endurance = (-pressAltCruise + 280000) / 40000;
+            break;
+        case 'min':
+            endurance = (-pressAltCruise + 280000) / 40000;
+            break;
+    }
+}
+
+let results = calc(1013, 8000, 0, "75%");
 console.log(results);
