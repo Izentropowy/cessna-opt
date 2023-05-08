@@ -1,6 +1,6 @@
 import { calcPressAlt, interpolate } from "./departureCalc.js";
 
-function findCorrespondingRows(value, arr){
+export function findCorrespondingRows(value, arr){
     if (value === "max") return [arr[0], arr[0]];
     else if (value === "min") return [arr[arr.length - 1], arr[arr.length - 1]];
     else value = parseFloat(value);
@@ -13,7 +13,7 @@ function findCorrespondingRows(value, arr){
     return [arr[searchedCol.indexOf(value) - 1], arr[searchedCol.indexOf(value)]];
 }
 
-function isMcpAvailable(mcp, arr){
+export function isMcpAvailable(mcp, arr){
     if (mcp === "max" || mcp === "min") return true;
     let value = parseFloat(mcp);
     // if outside of an array
@@ -21,13 +21,68 @@ function isMcpAvailable(mcp, arr){
     return true;
 }
 
-function calcPressAltCruise(qnh, cruise){
+export function calcPressAltCruise(qnh, cruise){
     let pressAlt = calcPressAlt(qnh, 0);
     let pressAltCruise = parseFloat(pressAlt) + parseFloat(cruise);
     return pressAltCruise;
 }
 
-function calc(qnh, cruise, isaDev, mcp){
+export function calcRange(qnh, cruise, mcp){
+    let pressAltCruise = calcPressAltCruise(qnh, cruise);
+    let range;
+    switch(mcp){
+        // linear functions derived from POH
+        case 'max':
+            range = (pressAltCruise + 30375) / 75;
+            break;
+        case '75%':
+            range = (pressAltCruise + 210375) / 425;
+            break;
+        case '65%':
+            range = (pressAltCruise + 214000) / 400;
+            break;
+        case '55%':
+            range = (pressAltCruise + 351000) / 600;
+            break;
+        case '45%':
+            range = (pressAltCruise + 756000) / 1200;
+            break;
+        case 'min':
+            range = (pressAltCruise + 210375) / 425;
+            break;
+        
+    }
+    return range;
+}
+
+export function calcEndurance(qnh, cruise, mcp){
+    let pressAltCruise = calcPressAltCruise(qnh, cruise);
+    let endurance;
+    switch(mcp){
+        // linear functions derived from POH
+        case 'max':
+            endurance = (pressAltCruise + 15714.3) / 5714.29;
+            break;
+        case '75%':
+            endurance = (-pressAltCruise + 688000) / 160000;
+            break;
+        case '65%':
+            endurance = (-pressAltCruise + 594000) / 120000;
+            break;
+        case '55%':
+            endurance = (-pressAltCruise + 348000) / 60000;
+            break;
+        case '45%':
+            endurance = (-pressAltCruise + 280000) / 40000;
+            break;
+        case 'min':
+            endurance = (-pressAltCruise + 280000) / 40000;
+            break;
+    }
+    return endurance;
+}
+
+export function calcEnroute(qnh, cruise, isaDev, mcp){
     
     let table = [[
         [
@@ -246,62 +301,8 @@ function calc(qnh, cruise, isaDev, mcp){
     let tas = interpolate(tempFloor, tempCeil, tasLowTemp, tasHighTemp, isaDev);
     let fuel = interpolate(tempFloor, tempCeil, fuelLowTemp, fuelHighTemp, isaDev);
 
-    calcRange(qnh, cruise, mcp);
-    calcEndurance(qnh, cruise, mcp);
-    return [rpm, tas, fuel];
-}
+    let range = calcRange(qnh, cruise, mcp);
+    let endurance = calcEndurance(qnh, cruise, mcp);
 
-function calcRange(qnh, cruise, mcp){
-    let pressAltCruise = calcPressAltCruise(qnh, cruise);
-    let range;
-    switch(mcp){
-        // linear functions derived from POH
-        case 'max':
-            range = (pressAltCruise + 30375) / 75;
-            break;
-        case '75%':
-            range = (pressAltCruise + 210375) / 425;
-            break;
-        case '65%':
-            range = (pressAltCruise + 214000) / 400;
-            break;
-        case '55%':
-            range = (pressAltCruise + 351000) / 600;
-            break;
-        case '45%':
-            range = (pressAltCruise + 756000) / 1200;
-            break;
-        case 'min':
-            range = (pressAltCruise + 210375) / 425;
-            break;
-    }
+    return [rpm, tas, fuel, range, endurance];
 }
-
-function calcEndurance(qnh, cruise, mcp){
-    let pressAltCruise = calcPressAltCruise(qnh, cruise);
-    let endurance;
-    switch(mcp){
-        // linear functions derived from POH
-        case 'max':
-            endurance = (pressAltCruise + 15714.3) / 5714.29;
-            break;
-        case '75%':
-            endurance = (-pressAltCruise + 688000) / 160000;
-            break;
-        case '65%':
-            endurance = (-pressAltCruise + 594000) / 120000;
-            break;
-        case '55%':
-            endurance = (-pressAltCruise + 348000) / 60000;
-            break;
-        case '45%':
-            endurance = (-pressAltCruise + 280000) / 40000;
-            break;
-        case 'min':
-            endurance = (-pressAltCruise + 280000) / 40000;
-            break;
-    }
-}
-
-let results = calc(1013, 8000, 0, "75%");
-console.log(results);
