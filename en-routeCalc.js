@@ -304,5 +304,13 @@ export function calcEnroute(qnh, cruise, isaDev, mcp){
     let range = calcRange(qnh, cruise, mcp);
     let endurance = calcEndurance(qnh, cruise, mcp);
 
-    return [rpm, tas, fuel, range, endurance];
+    fuel *= 3.785;
+    rpm = Math.round(rpm / 10) * 10;
+
+    endurance = endurance.toFixed(1);
+    let hours = Math.floor(endurance);
+    let minutes = Math.round((endurance - hours) * 60);
+    endurance = `${hours} h ${minutes} min`;
+
+    return [rpm.toFixed(0), tas.toFixed(0), fuel.toFixed(0), range.toFixed(0), endurance];
 }

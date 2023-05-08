@@ -32,7 +32,7 @@ function updateResults(){
     tas.textContent = calcAll()[1] + ' kt';
     fuel.textContent = calcAll()[2] + ' l / h';
     range.textContent = calcAll()[3] + ' Nm';
-    endurance.textContent = calcAll()[4] + ' h';
+    endurance.textContent = calcAll()[4];
 }
 
 function validate(input){
