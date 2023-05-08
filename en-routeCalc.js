@@ -261,7 +261,7 @@ export function calcEnroute(qnh, cruise, isaDev, mcp){
     // find values for lower temp
     let row1lowPressureLowTemp = findCorrespondingRows(mcp, pressReducedLowTemp[0])[0];
     let row2lowPressureLowTemp = findCorrespondingRows(mcp, pressReducedLowTemp[0])[1];
-
+ 
     let rpmlowPressureLowTemp = interpolate(row1lowPressureLowTemp[3], row2lowPressureLowTemp[3], row1lowPressureLowTemp[1], row2lowPressureLowTemp[1], parseFloat(mcp));
     let taslowPressureLowTemp = interpolate(row1lowPressureLowTemp[3], row2lowPressureLowTemp[3], row1lowPressureLowTemp[4], row2lowPressureLowTemp[4], parseFloat(mcp));
     let fuellowPressureLowTemp = interpolate(row1lowPressureLowTemp[3], row2lowPressureLowTemp[3], row1lowPressureLowTemp[5], row2lowPressureLowTemp[5], parseFloat(mcp));

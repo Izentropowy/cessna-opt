@@ -19,11 +19,11 @@ const variables = Array.from(document.querySelectorAll('.form-control'));
 
 
 function calcAll(){
-    let rpm = calcEnroute(qnh,value, cruise.value, isaDev.value, mcp.value)[0];
-    let tas = calcEnroute(qnh,value, cruise.value, isaDev.value, mcp.value)[1];  
-    let fuel = calcEnroute(qnh,value, cruise.value, isaDev.value, mcp.value)[2];
-    let range = calcEnroute(qnh,value, cruise.value, isaDev.value, mcp.value)[3];
-    let endurance = calcEnroute(qnh,value, cruise.value, isaDev.value, mcp.value)[4];
+    let rpm = calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)[0];
+    let tas = calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)[1];  
+    let fuel = calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)[2];
+    let range = calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)[3];
+    let endurance = calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)[4];
     return [rpm, tas, fuel, range, endurance];
 }
 
