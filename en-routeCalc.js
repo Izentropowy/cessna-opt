@@ -247,11 +247,11 @@ export function calcEnroute(qnh, cruise, isaDev, mcp){
 
     // tables only with required temperatures
     let tempReduced = [table[(tempFloor + 20) / 20], table[(tempCeil + 20) / 20]];
-    
+
     // for each temperature table find 2 correspoding pressure tables
     let pressReducedLowTemp = [tempReduced[0][pressFloor / 2000 - 1], tempReduced[0][pressCeil / 2000 - 1]];
     let pressReducedHighTemp = [tempReduced[1][pressFloor / 2000 - 1], tempReduced[1][pressCeil / 2000 - 1]];
-    
+
     // check if mcp is within range for current values
     if (!isMcpAvailable(mcp, pressReducedLowTemp[0])) return false;
     if (!isMcpAvailable(mcp, pressReducedLowTemp[1])) return false;

@@ -35,28 +35,23 @@ function updateResults(){
     endurance.textContent = calcAll()[4];
 }
 
+function addInvalid(input, button){
+    input.classList.add("invalid");
+    button.classList.add("shake");
+}
+
 function validate(input){
     if (parseFloat(input.value) < input.min || parseFloat(input.value) > input.max || input.value == ""){
-        input.classList.add("invalid");
-        button.classList.add("shake");
+        addInvalid(input, button);
         return false;
     }
 
     // max pa value in tables
     else if (input === cruise && calcPressAltCruise(qnh.value, cruise.value) > 12000 ){
-        input.classList.add("invalid");
-        button.classList.add("shake");
+        addInvalid(input, button);
         return false;
     }
 
-    // max/min rpm value in tables
-    else if (input === mcp){
-        if (!calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)[0]){
-            input.classList.add("invalid");
-            button.classList.add("shake");
-            return false;
-        }
-    }
     input.classList.remove("invalid");
     return true;
 }
@@ -65,6 +60,10 @@ function validateAll(){
     let validator = true;
     for (let element of variables) {
         if (!validate(element)) validator = false;
+    }
+    if (validator === true && !calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)){
+        addInvalid(mcp, button);
+        validator = false;
     }
     return validator;
 }
