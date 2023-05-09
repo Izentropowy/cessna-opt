@@ -49,6 +49,14 @@ function validate(input){
         return false;
     }
 
+    // max/min rpm value in tables
+    else if (input === mcp){
+        if (!calcEnroute(qnh.value, cruise.value, isaDev.value, mcp.value)[0]){
+            input.classList.add("invalid");
+            button.classList.add("shake");
+            return false;
+        }
+    }
     input.classList.remove("invalid");
     return true;
 }
