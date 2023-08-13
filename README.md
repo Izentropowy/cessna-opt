@@ -9,6 +9,7 @@
 
 - Built for personal use for studies
 - Tool for calculating performance for takeoff, cruise and landing
+- To be updated and refined in the future
 
 ## **Installation**
 
